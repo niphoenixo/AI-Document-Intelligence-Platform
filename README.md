@@ -115,3 +115,9 @@ pip install pydantic-settings
  \c document_ai
  \dt
  \d users
+
+
+
+ curl -X GET \
+  http://localhost:8000/api/v1/auth/me \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaXNoYUBleGFtcGxlLmNvbSIsInJvbGUiOiJVU0VSIiwiZXhwIjoxNzgzNTMxMjk1fQ.RX9l535YP0PV3DNMHCsp_28o8MJOB2t29PI_EEJ50_k"
