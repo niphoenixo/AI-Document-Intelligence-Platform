@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.user import User
@@ -11,11 +12,12 @@ class UserRepository:
         email: str
     ):
 
-        return (
-            db.query(User)
-            .filter(User.email == email)
-            .first()
+        stmt = (
+            select(User)
+            .where(User.email == email)
         )
+
+        return db.scalar(stmt)
 
     @staticmethod
     def create(
@@ -24,9 +26,7 @@ class UserRepository:
     ):
 
         db.add(user)
-
         db.commit()
-
         db.refresh(user)
 
         return user
