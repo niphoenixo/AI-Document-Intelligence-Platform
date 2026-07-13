@@ -1,11 +1,11 @@
+from logging.config import fileConfig
+
+from sqlalchemy import engine_from_config, pool
+from alembic import context
+
 from app.config import settings
 from app.database.base import Base
-
-from logging.config import fileConfig
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
-from alembic import context
+import app.models   # <-- This loads User and Document models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
