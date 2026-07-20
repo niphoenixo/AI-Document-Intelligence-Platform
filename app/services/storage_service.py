@@ -1,8 +1,9 @@
 from pathlib import Path
 from uuid import uuid4
 
-from fastapi import UploadFile
-
+from fastapi import UploadFile, HTTPException, status
+import os
+from fastapi.responses import FileResponse
 
 class StorageService:
 
@@ -42,3 +43,16 @@ class StorageService:
 
         if file_path.exists():
             file_path.unlink()
+
+    
+    @classmethod
+    def get_file_path(cls, stored_filename: str) -> str:
+        file_path = cls.STORAGE_DIR / stored_filename
+
+        if not file_path.exists():
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="File not found on server.",
+            )
+
+        return str(file_path)
