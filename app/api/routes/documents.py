@@ -10,6 +10,7 @@ from app.schemas.document import (
 )
 from app.services.document_service import DocumentService
 from typing import List
+from app.schemas.document import DocumentContentResponse
 
 router = APIRouter(
     prefix="/api/v1/documents",
@@ -103,4 +104,33 @@ def download_document(
         path=result["file_path"],
         filename=result["filename"],
         media_type="application/octet-stream",
+    )
+
+@router.post(
+    "/{document_uuid}/process",
+)
+def process_document(
+    document_uuid: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return DocumentService.process_document(
+        db=db,
+        current_user=current_user,
+        document_uuid=document_uuid,
+    )
+
+@router.get(
+    "/{document_uuid}/content",
+    response_model=DocumentContentResponse,
+)
+def get_document_content(
+    document_uuid: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return DocumentService.get_document_content(
+        db=db,
+        current_user=current_user,
+        document_uuid=document_uuid,
     )

@@ -2,6 +2,9 @@ from sqlalchemy.orm import Session
 
 from app.models.document import Document
 
+from app.models.document_status import DocumentStatus
+
+
 class DocumentRepository:
 
     @staticmethod
@@ -52,3 +55,17 @@ class DocumentRepository:
     ):
         db.delete(document)
         db.commit()
+
+
+
+    @staticmethod
+    def update_status(
+        db: Session,
+        document: Document,
+        status: DocumentStatus,
+    ):
+        document.status = status
+        db.commit()
+        db.refresh(document)
+
+        return document

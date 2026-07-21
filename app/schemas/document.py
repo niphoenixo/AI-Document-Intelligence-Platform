@@ -16,3 +16,10 @@ class DocumentResponse(BaseModel):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class DocumentContentResponse(BaseModel):
+    raw_text: str
+    page_count: int
+
+    model_config = ConfigDict(from_attributes=True)

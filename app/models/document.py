@@ -3,6 +3,7 @@ import uuid
 from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
+from app.models.document_status import DocumentStatus
 
 from app.database.base import Base
 
@@ -41,9 +42,9 @@ class Document(Base):
         nullable=False
     )
 
-    status: Mapped[str] = mapped_column(
-        String(20),
-        default="UPLOADED"
+    status: Mapped[DocumentStatus] = mapped_column(
+        nullable=False,
+        default=DocumentStatus.UPLOADED
     )
 
     uploaded_by: Mapped[int] = mapped_column(

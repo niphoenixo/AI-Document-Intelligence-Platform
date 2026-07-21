@@ -8,7 +8,8 @@ from app.repositories.document_repository import DocumentRepository
 
 from app.services.storage_service import StorageService
 from app.services.file_validation_service import FileValidationService
-
+from app.services.processing_service import ProcessingService
+from app.services.document_content_service import DocumentContentService
 
 class DocumentService:
 
@@ -166,3 +167,74 @@ class DocumentService:
             "file_path": file_path,
             "filename": document.original_filename,
         }
+    
+    @staticmethod
+    def process_document(
+        db: Session,
+        current_user: User,
+        document_uuid: str,
+    ):
+        document = DocumentRepository.get_by_uuid(
+            db=db,
+            uuid=document_uuid,
+        )
+
+        if not document:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Document not found.",
+            )
+
+        if document.uploaded_by != current_user.id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You are not authorized to process this document.",
+            )
+
+        ProcessingService.process_document(
+            db=db,
+            document=document,
+        )
+
+        return {
+            "message": "Document processed successfully.",
+            "status": document.status,
+        }
+    
+
+
+    @staticmethod
+    def get_document_content(
+        db: Session,
+        current_user: User,
+        document_uuid: str,
+    ):
+        document = DocumentRepository.get_by_uuid(
+            db=db,
+            uuid=document_uuid,
+        )
+
+        if not document:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Document not found.",
+            )
+
+        if document.uploaded_by != current_user.id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You are not authorized to access this document.",
+            )
+
+        document_content = DocumentContentService.get_content(
+            db=db,
+            document_id=document.id,
+        )
+
+        if not document_content:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Document content not found.",
+            )
+
+        return document_content
