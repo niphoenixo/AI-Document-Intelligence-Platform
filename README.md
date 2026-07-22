@@ -1,123 +1,86 @@
+# AI Document Intelligence Platform
 
-#Step 1 – Create the project
-mkdir ai-document-intelligence-platform
+A backend service built with **FastAPI** for uploading, processing, and managing documents. The platform extracts text from uploaded documents and provides a foundation for AI-powered document understanding.
 
-cd ai-document-intelligence-platform
-Initialize Git:
-git init
+## Features
 
-## =====================
-#Step 2 – Create folders
-mkdir -p app/{api/routes,models,schemas,services,workers,database/migrations,repositories,utils,middleware}
-mkdir -p tests
-mkdir -p docs
-mkdir -p sample_documents
-mkdir -p scripts
+- User Authentication (JWT)
+- Document Upload & Storage
+- Document Download & Delete
+- Document Listing with Pagination
+- Document Processing Workflow
+- Document Status Tracking
+- OCR Content Storage
+- Retrieve Extracted Document Text
+- RESTful APIs with OpenAPI (Swagger)
 
-touch README.md LICENSE .gitignore .env.example requirements.txt docker-compose.yml Dockerfile
+## Tech Stack
 
-touch app/main.py
-touch app/config.py
-touch app/dependencies.py
+- Python 3.13
+- FastAPI
+- SQLAlchemy
+- PostgreSQL
+- Alembic
+- Pydantic
+- JWT Authentication
 
-touch app/api/router.py
+## Project Structure
 
-touch app/api/routes/auth.py
-touch app/api/routes/documents.py
-touch app/api/routes/jobs.py
-touch app/api/routes/health.py
-touch app/api/routes/users.py
+```
+app/
+├── api/
+├── models/
+├── repositories/
+├── schemas/
+├── services/
+├── core/
+└── utils/
+```
 
-touch app/models/document.py
-touch app/models/job.py
-touch app/models/user.py
+## Processing Workflow
 
-touch app/schemas/document.py
-touch app/schemas/job.py
-touch app/schemas/auth.py
+```
+Upload Document
+       │
+       ▼
+Process Document
+       │
+       ▼
+OCR Service
+       │
+       ▼
+Store Extracted Text
+       │
+       ▼
+Retrieve OCR Content
+```
 
-touch app/services/auth_service.py
-touch app/services/document_service.py
-touch app/services/ocr_service.py
-touch app/services/llm_service.py
-touch app/services/extraction_service.py
-touch app/services/storage_service.py
-touch app/services/notification_service.py
+## API Endpoints
 
-touch app/workers/celery_app.py
-touch app/workers/tasks.py
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/auth/register` | Register user |
+| POST | `/auth/login` | Login |
+| POST | `/documents/upload` | Upload document |
+| GET | `/documents` | List documents |
+| GET | `/documents/{uuid}` | Get document details |
+| GET | `/documents/{uuid}/download` | Download document |
+| DELETE | `/documents/{uuid}` | Delete document |
+| POST | `/documents/{uuid}/process` | Process document |
+| GET | `/documents/{uuid}/content` | Get extracted text |
 
-touch app/database/session.py
-touch app/database/base.py
+## Current Status
 
-touch app/repositories/document_repository.py
-touch app/repositories/job_repository.py
-touch app/repositories/user_repository.py
+- ✅ Authentication
+- ✅ Document Management
+- ✅ Processing Pipeline
+- ✅ OCR Service Architecture
+- ✅ OCR Content Storage
 
-touch app/utils/logger.py
-touch app/utils/validators.py
-touch app/utils/security.py
-touch app/utils/helpers.py
+## Planned Features
 
-touch app/middleware/auth.py
-touch app/middleware/request_logger.py
-
-touch tests/test_api.py
-touch tests/test_ocr.py
-touch tests/test_llm.py
-touch tests/test_jobs.py
-touch tests/test_auth.py
-
-touch docs/architecture.png
-touch docs/sequence_diagram.png
-touch docs/api_examples.md
-
-touch scripts/seed_database.py
-touch scripts/create_admin.py
-
-touch app/__init__.py
-touch app/api/__init__.py
-touch app/api/routes/__init__.py
-touch app/models/__init__.py
-touch app/schemas/__init__.py
-touch app/services/__init__.py
-touch app/workers/__init__.py
-touch app/database/__init__.py
-touch app/repositories/__init__.py
-touch app/utils/__init__.py
-touch app/middleware/__init__.py
-
-## ====================
-#Step 3 – Create virtual environment
-python -m venv .venv
-Mac/Linux
-source .venv/bin/activate
-
-##================
-
-#Step 4 – Install packages
-
-pip install fastapi
-pip install uvicorn
-pip install sqlalchemy
-pip install psycopg2-binary
-pip install python-dotenv
-pip install python-multipart
-pip install passlib[bcrypt]
-pip install python-jose[cryptography]
-pip install alembic
-pip install pydantic-settings
-
-
-
- docker exec -it ai-document-db psql -U postgres
- \l
- \c document_ai
- \dt
- \d users
-
-
-
- curl -X GET \
-  http://localhost:8000/api/v1/auth/me \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuaXNoYUBleGFtcGxlLmNvbSIsInJvbGUiOiJVU0VSIiwiZXhwIjoxNzgzNTMxMjk1fQ.RX9l535YP0PV3DNMHCsp_28o8MJOB2t29PI_EEJ50_k"
+- Real OCR using Tesseract
+- AI-based Field Extraction (OpenAI)
+- Background Processing with Celery & Redis
+- Search & Filtering
+- Document Summarization
