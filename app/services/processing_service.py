@@ -33,7 +33,8 @@ class ProcessingService:
                 raw_text=raw_text,
             )
 
-            fields = ExtractionService.extract_fields(raw_text)
+            extraction_service = ExtractionService()
+            fields = extraction_service.extract_fields(raw_text)
 
             DocumentFieldService.save_fields(
                 db=db,
