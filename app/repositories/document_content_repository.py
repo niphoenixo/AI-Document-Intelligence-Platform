@@ -35,3 +35,19 @@ class DocumentContentRepository:
             .filter(DocumentContent.document_id == document_id)
             .first()
         )
+    
+    @staticmethod
+    def update(
+        db: Session,
+        document_content: DocumentContent,
+        raw_text: str,
+        page_count: int = 1,
+    ) -> DocumentContent:
+
+        document_content.raw_text = raw_text
+        document_content.page_count = page_count
+
+        db.commit()
+        db.refresh(document_content)
+
+        return document_content

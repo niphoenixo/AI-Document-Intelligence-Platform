@@ -1,10 +1,9 @@
 import uuid
 
 from sqlalchemy import DateTime, ForeignKey, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from app.models.document_status import DocumentStatus
-
 from app.database.base import Base
 
 
@@ -56,3 +55,18 @@ class Document(Base):
         DateTime(timezone=True),
         server_default=func.now()
     )
+    document_content = relationship(
+        "DocumentContent",
+        back_populates="document",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    document_field = relationship(
+        "DocumentField",
+        back_populates="document",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    

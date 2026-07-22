@@ -6,6 +6,7 @@ from PIL import Image
 
 
 class OCRService:
+    
     @staticmethod
     def extract_text(file_path: str) -> str:
         """

@@ -1,5 +1,5 @@
 from sqlalchemy import DateTime, ForeignKey, Integer, Text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
 from app.database.base import Base
@@ -31,4 +31,9 @@ class DocumentContent(Base):
     created_at: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
+    )
+
+    document = relationship(
+        "Document",
+        back_populates="document_content",
     )

@@ -6,6 +6,11 @@ from app.models.document_status import DocumentStatus
 from app.repositories.document_repository import DocumentRepository
 from app.services.document_content_service import DocumentContentService
 
+from app.services.extraction_service import ExtractionService
+from app.services.document_field_service import DocumentFieldService
+from pathlib import Path
+from app.services.ocr_service import OCRService
+
 class ProcessingService:
 
     @staticmethod
@@ -28,7 +33,13 @@ class ProcessingService:
                 raw_text=raw_text,
             )
 
-            ProcessingService.extract_fields(document)
+            fields = ExtractionService.extract_fields(raw_text)
+
+            DocumentFieldService.save_fields(
+                db=db,
+                document_id=document.id,
+                fields=fields,
+            )
 
             DocumentRepository.update_status(
                 db=db,
@@ -37,6 +48,8 @@ class ProcessingService:
             )
 
         except Exception:
+
+            db.rollback()
 
             DocumentRepository.update_status(
                 db=db,
@@ -49,21 +62,16 @@ class ProcessingService:
     @staticmethod
     def extract_text(
         document: Document,
-    ):
-        time.sleep(2)
+    ) -> str:
 
-        return """
-        Invoice Number: INV-1001
+        file_path = Path("storage") / "documents" / document.stored_filename
 
-        Vendor: Amazon UK
-
-        Amount: £425
-
-        Date: 20/07/2026
-        """
+        return OCRService.extract_text(str(file_path))
 
     @staticmethod
-    def extract_fields(
+    def _extract_fields(
         document: Document,
     ):
         time.sleep(3)
+
+   
