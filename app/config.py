@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     OPENAI_API_KEY: str
     OPENAI_MODEL: str = "gpt-4.1-mini"
+    REDIS_URL: str
 
     class Config:
         env_file = ".env"
